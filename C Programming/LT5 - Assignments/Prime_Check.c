@@ -17,7 +17,6 @@ int main()
 	int x , y, i , result;
 
 	printf("Enter two numbers: ");
-	fflush(stdout); fflush(stdin);
 	scanf("%d %d",&x,&y);
 
 
