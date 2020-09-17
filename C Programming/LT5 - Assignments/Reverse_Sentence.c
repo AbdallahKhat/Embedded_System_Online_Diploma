@@ -11,7 +11,7 @@
 
 //C Program to Reverse a Sentence Using Recursion
 
-void reverse();
+void reverse(char str[] , int i);
 
 int main()
 {
