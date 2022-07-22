@@ -14,8 +14,12 @@ int main()
 	char i;
 
 	printf("Enter a character: ");
+
 	fflush(stdin); fflush(stdout);
+
 	scanf("%c", &i);
-	printf("ASCII value of G = %d", i);
+
+	printf("ASCII value of %c = %d", i , i);
+
 	return 0;
 }
