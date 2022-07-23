@@ -17,21 +17,27 @@ int main()
 	fflush(stdin); fflush(stdout);
 	scanf("%d", &num);
 
-	for(i=0; i<num ; i++){
-		arr[i] = (i+1)*11;
-		printf("%d ", arr[i]);
+	printf("Enter the values\n");
+	fflush(stdin); fflush(stdout);
+
+	for(i=0; i<num ; i++)
+	{
+		scanf("%d",&arr[i]);
 	}
 
 	printf("\nEnter the element to be searched: ");
 	fflush(stdin); fflush(stdout);
 	scanf("%d", &element);
 
-	for(i=0 ; i<num ; i++){
-		if(element == arr[i]){
+	for(i=0 ; i<num ; i++)
+	{
+		if(element == arr[i])
+		{
 			printf("Number found at location: %d", i+1);
 			break;
 		}
-		else if(i+1 == num){
+		else if(i+1 == num)
+		{
 			printf("Number not found");
 		}
 	}
