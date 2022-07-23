@@ -1,7 +1,7 @@
 /*
  * Calculate_Average_Using_Arrays.c
  *
- *  Created on: Sep 4, 2020
+ *  Created on: Jul 23, 2022
  *      Author: Abdallah Khater
  */
 
@@ -13,28 +13,32 @@ stores data in an array and calculates the average of those numbers.*/
 
 int main()
 {
-	float num[100], sum, average;
-	int i=0 ,n;
+	float sum,average, arr[100];
+	int num,i;
 
 	printf("Enter the number of data: ");
 	fflush(stdin); fflush(stdout);
-	scanf("%d",&n);
-	while(i<n)
-	{
-		printf("1. Enter number: ");
-		fflush(stdin); fflush(stdout);
-		scanf("%f",&num[i]);
-		i++;
+	scanf("%d",&num);
 
+	while (num>100 || num<=0)
+	{
+		printf("Number should be in range of 1 to 100.\n");
+		printf("Insert a new number");
+		fflush(stdin); fflush(stdout);
+		scanf("%d",&num);
 	}
 
-	for(i=0; i<n; i++)
-		sum += num[i];
+	for(i=0,sum=0;i<num;i++)
+	{
+		printf("%d. Enter number: ",i+1);
+		fflush(stdin); fflush(stdout);
+		scanf("%f",&arr[i]);
+		sum += arr[i];
+	}
+	average = sum/i;
 
-
-	average = sum/n;
-
-	printf("Average = %.2f", average);
+	printf("Average = %.2f",average);
 
 	return 0;
+
 }
