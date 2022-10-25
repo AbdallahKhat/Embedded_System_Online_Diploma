@@ -1,0 +1,34 @@
+$ arm-none-eabi-nm main.o
+00000000 T main
+
+
+
+$ arm-none-eabi-nm startup.o
+         U _E_bss
+         U _E_DATA
+         U _E_text
+         U _S_bss
+         U _S_DATA
+00000000 T Default_Handler
+00000000 R g_p_fn_vectors
+00000000 W H_Fault_Handler
+         U main
+00000000 W NMI_Handler
+0000000c T Rest_Handler
+00000000 b stack_top
+
+
+
+$ arm-none-eabi-nm unit3_lab3_cortexM4.elf
+20000400 B _E_bss
+00000000 T _E_DATA
+0000012c T _E_text
+20000000 B _S_bss
+00000000 T _S_DATA
+0000009c T Default_Handler
+00000000 T g_p_fn_vectors
+0000009c W H_Fault_Handler
+00000010 T main
+0000009c W NMI_Handler
+000000a8 T Rest_Handler
+20000000 b stack_top
