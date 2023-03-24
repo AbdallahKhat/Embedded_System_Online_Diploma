@@ -1,0 +1,2 @@
+../STM32_F103C6_Drivers/KEYPAD_DRIVER/Keypad_Driver.c:13:6:KEYPAD_INIT	8	static
+../STM32_F103C6_Drivers/KEYPAD_DRIVER/Keypad_Driver.c:61:6:KEYPAD_GETCHAR	16	static
