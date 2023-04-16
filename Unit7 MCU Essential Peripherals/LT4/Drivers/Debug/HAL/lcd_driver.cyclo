@@ -1,0 +1,9 @@
+lcd_driver.c:15:6:LCD_kick	1
+lcd_driver.c:25:6:LCD_GOTO_XY	7
+lcd_driver.c:39:6:LCD_isbusy	1
+lcd_driver.c:139:6:LCD_clear_screen	1
+lcd_driver.c:144:6:LCD_INIT	1
+lcd_driver.c:233:6:LCD_WRITE_COMMAND	1
+lcd_driver.c:259:6:LCD_WRITE_CHAR	1
+lcd_driver.c:286:6:LCD_WRITE_STRING	4
+lcd_driver.c:308:6:LCD_CUSTOM_CHARACTERS	1
