@@ -16,6 +16,9 @@
 #define Read_BIT(reg, shift)			((reg & (1 << shift)) >> shift)
 
 
+#define Defaultstop						'\r'
+
+
 /**================================================================
  * @Fn			-UART_INIT
  * @brief 		-This is used to initialize USART in Atmega32 
@@ -70,11 +73,33 @@ void UART_SendString(char* pstr);
 /**================================================================
  * @Fn			-UART_ReceiveString
  * @brief 		-This is used to receive string using UART Protocol
- * @param [in] 	-String: The string variable to receive the string transmitted
+ * @param [in] 	-Buff: The string variable to receive the string transmitted
  * @retval 		-none
  * Note			-none
  */
-void UART_ReceiveString(char* String);
+void UART_ReceiveString(char* Buff);
 
+/**================================================================
+ * @Fn			-UART_Receive_PeriodicCheck
+ * @brief 		-This is used to receive data without blocking the CPU
+ * @param [in] 	-pdata: The string variable to receive the string transmitted
+ * @retval 		-received data
+ * Note			-none
+ */
+unsigned char UART_Receive_PeriodicCheck(unsigned char *pdata);
+
+void UART_SendNoBlock(unsigned char data);
+
+unsigned char UART_ReceiveNoBlock(unsigned char data);
+
+void UART_RX_InterruptEnable(void);
+
+void UART_RX_InterruptDisable(void);
+
+void UART_TX_InterruptEnable(void);
+
+void UART_TX_InterruptDisable(void);
+
+void UART_SendString_Asynch(unsigned char *str);
 
 #endif /* UART_H_ */

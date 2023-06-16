@@ -6,9 +6,13 @@
  */ 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "UART.h"
 
 #define NULL 0
+
+static unsigned char* TX_Str;
+static unsigned char flag_send = 1;
 
 /**================================================================
  * @Fn			-UART_INIT
@@ -117,33 +121,118 @@ void UART_SendString(char* pstr)
 	int count;
 	
 	//for loop to send string char by char until NULL
-	for(count=0; pstr[count] != NULL ; count++)
+	for(count=0; count < pstr[count] ; count++)
 	{
 		UART_Send(pstr[count]);
 	}
+	UART_Send(Defaultstop);
 }
 
 /**================================================================
  * @Fn			-UART_ReceiveString
  * @brief 		-This is used to receive string using UART Protocol
- * @param [in] 	-String: The string variable to receive the string transmitted
+ * @param [in] 	-Buff: The string variable to receive the string transmitted
  * @retval 		-none
  * Note			-none
  */
-void UART_ReceiveString(char* String)
+void UART_ReceiveString(char* Buff)
 {
 	int count = 0;
 	
 	//assigning elements of transmitted string to string variable until '#' 
 	while(1)
 	{
-		String[count] = UART_Receive();
-		count++;
+		Buff[count] = UART_Receive();
 		
-		if(String[count-1] == '#')
+		
+		while(Buff[count] != Defaultstop)
 		{
-			String[count-1] = NULL;
-			break;
+			count++;
+			Buff[count] = UART_Receive();
 		}
+		Buff[count] = '\0' ; 
+		
+	}
+}
+
+/**================================================================
+ * @Fn			-UART_Receive_PeriodicCheck
+ * @brief 		-This is used to receive data without blocking the CPU
+ * @param [in] 	-pdata: The string variable to receive the string transmitted
+ * @retval 		-received data
+ * Note			-none
+ */
+unsigned char UART_Receive_PeriodicCheck(unsigned char *pdata)
+{
+	if(Read_BIT(UCSRA,RXC))
+	{
+		*pdata = UDR ;
+		return 1 ;
+	}
+	return 0 ;
+}
+
+
+
+//Functions for interrupt use
+
+void UART_SendNoBlock(unsigned char data)
+{
+	UDR = data ;
+}
+
+unsigned char UART_ReceiveNoBlock(unsigned char data)
+{
+	return UDR ;
+}
+
+void UART_RX_InterruptEnable(void)
+{
+	SET_BIT(UCSRB,RXCIE) ;
+}
+
+void UART_RX_InterruptDisable(void)
+{
+	CLR_BIT(UCSRB,RXCIE) ;
+}
+
+void UART_TX_InterruptEnable(void)
+{
+	SET_BIT(UCSRB,TXCIE) ;
+}
+
+void UART_TX_InterruptDisable(void)
+{
+	CLR_BIT(UCSRB,TXCIE) ;
+}
+
+
+//Function Asynchronous to send string
+
+void UART_SendString_Asynch(unsigned char *str)
+{
+	if(flag_send == 1)
+	{
+		UART_TX_InterruptEnable();
+		UART_SendNoBlock(str[0]);
+		TX_Str = str;
+		flag_send = 0;
+	}
+}
+
+
+ISR(UART_TX_vect)
+{
+	static unsigned char i = 1;
+	if( TX_Str[i] != 0 )
+	{
+		UART_SendNoBlock(TX_Str[i]);
+		i++;
+		
+	}
+	else
+	{
+		i = 1 ;
+		flag_send = 1;
 	}
 }
