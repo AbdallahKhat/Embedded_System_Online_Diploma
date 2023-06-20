@@ -9,6 +9,16 @@
 #ifndef UART_H_
 #define UART_H_
 
+//-----------------------------
+//Includes
+//-----------------------------
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+//-----------------------------
+//Generic Macros
+//-----------------------------
 
 //Macros to set/reset/read bit in a register
 #define SET_BIT(reg, shift)				reg |= (1 << shift)
@@ -18,6 +28,11 @@
 
 #define Defaultstop						'\r'
 
+/*
+* ===============================================
+* APIs Supported by "USART DRIVER"
+* ===============================================
+*/
 
 /**================================================================
  * @Fn			-UART_INIT
