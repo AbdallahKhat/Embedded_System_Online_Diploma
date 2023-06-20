@@ -158,3 +158,9 @@ void LCD_CUSTOM_CHARACTERS()
 	_delay_ms(10);
 
 }
+
+
+void LCD_WRITE_NUMBER(unsigned char Num)
+{
+	LCD_WRITE_CHAR((Num + '0')) ;
+}
