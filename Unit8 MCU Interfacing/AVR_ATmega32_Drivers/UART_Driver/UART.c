@@ -5,14 +5,25 @@
  *  Author: Abdallah Khater
  */ 
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
+
 #include "UART.h"
 
 #define NULL 0
 
+/*
+ * ================================================================
+ * 						Generic Variables
+ * ================================================================
+ */
+
 static unsigned char* TX_Str;
 static unsigned char flag_send = 1;
+
+/*
+ * ================================================================
+ * 						API Function Definitions
+ * ================================================================
+ */
 
 /**================================================================
  * @Fn			-UART_INIT
@@ -221,7 +232,7 @@ void UART_SendString_Asynch(unsigned char *str)
 }
 
 
-ISR(UART_TX_vect)
+ISR(USART_TXC_vect)
 {
 	static unsigned char i = 1;
 	if( TX_Str[i] != 0 )
