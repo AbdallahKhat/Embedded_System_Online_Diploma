@@ -15,7 +15,9 @@
  * ================================================================
  */
 
-SPI_Config* Global_SPI_Config[2] = {NULL,NULL};
+SPI_Config* Global_SPI_Config[2] = {NULL,NULL}  ;
+SPI_Config Global_SPI_Config1 ;
+SPI_Config Global_SPI_Config2 ;
 
 /*
  * ================================================================
@@ -55,12 +57,14 @@ void MCAL_SPI_Init(SPI_TypeDef* SPIx,SPI_Config* SPI_Config)
 	//& Enable the clock for given USART Peripheral
 	if(SPIx == SPI1)
 	{
-		Global_SPI_Config[SPI1_INDEX] = SPI_Config ;
+		Global_SPI_Config1 = *SPI_Config ;
+		Global_SPI_Config[SPI1_INDEX] = &Global_SPI_Config1 ;
 		RCC_SPI1_CLK_EN();
 	}
 	else if (SPIx == SPI2)
 	{
-		Global_SPI_Config[SPI2_INDEX] = SPI_Config ;
+		Global_SPI_Config2 = *SPI_Config ;
+		Global_SPI_Config[SPI2_INDEX] = &Global_SPI_Config2 ;
 		RCC_SPI2_CLK_EN();
 	}
 
@@ -142,12 +146,12 @@ void MCAL_SPI_DeInit(SPI_TypeDef* SPIx)
 	//Reset Module by RCC and Reset NVIC IRQ Mask
 	if(SPIx == SPI1)
 	{
-		RCC_SPI1_CLK_Reset() ;
+		RCC_SPI1_Reset() ;
 		NVIC_IRQ35_SPI1_Disable() ;
 	}
 	else if(SPIx == SPI2)
 	{
-		RCC_SPI2_CLK_Reset() ;
+		RCC_SPI2_Reset() ;
 		NVIC_IRQ36_SPI2_Disable() ;
 	}
 }
