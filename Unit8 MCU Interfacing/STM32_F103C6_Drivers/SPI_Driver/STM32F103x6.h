@@ -249,8 +249,8 @@ typedef struct
 #define RCC_USART3_Reset()						(RCC->APB1RSTR |= 1<<18)
 
 //Clock Disable SPI
-#define RCC_SPI1_CLK_Reset()					(RCC->APB2RSTR |= 1<<12)
-#define RCC_SPI2_CLK_Reset()					(RCC->APB1RSTR |= 1<<14)
+#define RCC_SPI1_Reset()						(RCC->APB2RSTR |= 1<<12)
+#define RCC_SPI2_Reset()						(RCC->APB1RSTR |= 1<<14)
 
 //================================================================================================
 
