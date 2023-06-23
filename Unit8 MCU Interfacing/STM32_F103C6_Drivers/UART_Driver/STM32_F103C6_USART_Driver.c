@@ -10,23 +10,19 @@
 
 /*
  * ================================================================
- * 						Generic Variables
+ *                       Generic Variables
  * ================================================================
  */
 
 UART_Config* Global_UART_Config[3] = {NULL,NULL,NULL};
-
-/*
- * ================================================================
- * 						Generic Functions
- * ================================================================
- */
-
+UART_Config Global_UART_Config1 ;
+UART_Config Global_UART_Config2 ;
+UART_Config Global_UART_Config3 ;
 
 
 /*
  * ================================================================
- * 						API Function Definitions
+ *                     API Function Definitions
  * ================================================================
  */
 
@@ -44,14 +40,20 @@ void MCAL_UART_Init (USART_TypeDef* USARTx,UART_Config* UART_Config)
 
 	//Assigning UART_Config pointer to Global_UART_Config pointer for use in another functions
 	if(USARTx == USART1)
-		Global_UART_Config[0] = UART_Config ;
-
+	{
+		Global_UART_Config1 = *UART_Config ;
+		Global_UART_Config[0] = &Global_UART_Config1 ;
+	}
 	else if(USARTx == USART2)
-		Global_UART_Config[1] = UART_Config ;
-
+	{
+		Global_UART_Config2 = *UART_Config ;
+		Global_UART_Config[1] = &Global_UART_Config2 ;
+	}
 	else if(USARTx == USART3)
-		Global_UART_Config[2] = UART_Config;
-
+	{
+		Global_UART_Config3 = *UART_Config ;
+		Global_UART_Config[2] = &Global_UART_Config3;
+	}
 
 	//Enable the clock for given USART Peripheral
 	if(USARTx == USART1)
@@ -241,7 +243,7 @@ void MCAL_UART_Wait_TC (USART_TypeDef *USARTx)
 
 /**================================================================
  * @Fn			-MCAL_UART_ReceiveData
- * @brief 		-Send Buffer on UART
+ * @brief 		-Receive Buffer on UART
  * @param [in] 	-USARTx: where x can be (1..3 depending on device used)
  * @param [in] 	-pRxBuffer: Buffer to receive data
  * @param [in] 	-PollingEn: Enable polling or disable it
@@ -495,17 +497,17 @@ void MCAL_UART_GPIO_Set_pins (USART_TypeDef* USARTx)
 }
 
 
-//ISR
+//==============================ISR==============================
 
-void USART1_IRQHandler(void)
+void USART1_IRQHandler(void)        			// USART1 global interrupt
 {
 	Global_UART_Config[0]->P_IRQ_Callback() ;
 }
-void USART2_IRQHandler(void)
+void USART2_IRQHandler(void)        			// USART2 global interrupt
 {
 	Global_UART_Config[1]->P_IRQ_Callback() ;
 }
-void USART3_IRQHandler(void)
+void USART3_IRQHandler(void)        			// USART3 global interrupt
 {
 	Global_UART_Config[2]->P_IRQ_Callback() ;
 }
