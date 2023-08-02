@@ -23,7 +23,7 @@ SECTIONS
 		_S_DATA = . ;
 		*(.data)
 		_E_DATA = . ;
-	} > starm AT> flash
+	} > sram AT> flash
 
 	.bss :
 	{
