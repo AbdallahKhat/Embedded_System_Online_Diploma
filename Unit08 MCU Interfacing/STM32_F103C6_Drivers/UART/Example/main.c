@@ -31,8 +31,6 @@
 #include "STM32_F103C6_USART_Driver.h"
 #include "STM32_F103C6_RCC_Driver.h"
 
-#include "lcd_driver.h"
-
 
 void clock_init()
 {

@@ -41,9 +41,6 @@
 #include "STM32_F103C6_SPI_Driver.h"
 
 
-#include "lcd_driver.h"
-
-
 void clock_init()
 {
 	//Enable clock for GPIO
