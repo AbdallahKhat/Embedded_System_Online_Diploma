@@ -28,8 +28,6 @@
 #include "STM32F103x6.h"
 #include "STM32_F103C6_GPIO_Driver.h"
 #include "STM32_F103C6_EXTI_Driver.h"
-#include "lcd_driver.h"
-#include "Keypad_Driver.h"
 
 
 uint8_t IRQ_Flag = 0;

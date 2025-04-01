@@ -21,6 +21,8 @@
 #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+#include "core_cm3.h"
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,8 +30,6 @@
 #include "STM32F103x6.h"
 #include "STM32_F103C6_GPIO_Driver.h"
 #include "STM32_F103C6_EXTI_Driver.h"
-#include "lcd_driver.h"
-#include "Keypad_Driver.h"
 
 
 uint8_t TaskA_Flag, TaskB_Flag, IRQ_Flag;
@@ -68,11 +68,6 @@ unsigned int _E_PSP_TB ;
                                                       "MSR CONTROL, R3");
 
 
-
-void SVC_Handler ()
-{
-    SWITCH_CPU_AccessLevel_privileged;
-}
 
 void EXTI9_Callback(void)
 {
@@ -152,24 +147,103 @@ void mainOS()
 
 }
 
+void PendSV_Handler()
+{
+    /* PendSV_Handler Body */
+}
+
+void OS_SVC_services(int* StackFramePointer)
+{
+    //OS_SVC_Set stack -> R0 -> argument 0 = StackFramePointer
+    //OS_SVC_Set stack : R0,R1,R2,R3,R12,LR,PC,xPSR
+
+    unsigned char SVC_number  ;
+    unsigned char val1 , val2 ;
+
+    SVC_number = ((unsigned char *)StackFramePointer[6])[-2];
+
+    val1 = StackFramePointer[0] ; //argument 0 -> R0 of OS_SVC_Set stack
+    val2 = StackFramePointer[1] ; //argument 1 -> R1 of OS_SVC_Set stack
+
+    switch(SVC_number)
+    {
+    case 1: //OS ADD
+        StackFramePointer[0] = val1 + val2 ;
+        break;
+
+    case 2: //OS SUB
+        StackFramePointer[0] = val1 - val2 ;
+        break;
+
+    case 3: //OS MULT
+        StackFramePointer[0] = val1 * val2 ;
+
+    case 4: //PendSV
+        SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk ;
+        break;
+    }
+
+}
+
+__attribute ((naked)) void SVC_Handler ()
+{
+    __asm("TST   LR,#0x04     \n\t"
+          "ITE   EQ           \n\t"
+          "MRSEQ R0,MSP       \n\t"
+          "MRSNE R0,PSP       \n\t"
+          "B OS_SVC_services      ");
+}
+
+
+int OS_SVC_Set(int a, int b, int SVC_ID)
+{
+    int result;
+
+    switch(SVC_ID)
+    {
+    case 1: //OS ADD
+        __asm("svc #0x01");
+        break;
+
+    case 2: //OS SUB
+        __asm("svc #0x02");
+        break;
+
+    case 3: //OS MULT
+        __asm("svc #0x03");
+        break;
+
+    case 4: //PendSV
+        __asm("svc #0x04");
+        break;
+    }
+
+    //R0 will have the return value
+    __asm("MOV %0,R0": "=r" (result));
+
+    return result;
+}
+
 int main(void)
 {
     //Enable clock
-    RCC_GPIOB_CLK_EN();
-    RCC_AFIO_CLK_EN();
-
-    //Set EXTI Configurations
-    EXTI_PinConfig_t EXTI_CFG ;
-    EXTI_CFG.EXTI_PIN = EXTI9PB9 ;
-    EXTI_CFG.Trigger_Case = EXTI_Trigger_RISING ;
-    EXTI_CFG.P_IRQ_Callback = EXTI9_Callback ;
-    EXTI_CFG.IRQ_EN = EXTI_IRQ_Enable ;
-    MCAL_EXTI_GPIO_Init(&EXTI_CFG);
-
-
-
-    mainOS();
+//    RCC_GPIOB_CLK_EN();
+//    RCC_AFIO_CLK_EN();
+//
+//    //Set EXTI Configurations
+//    EXTI_PinConfig_t EXTI_CFG ;
+//    EXTI_CFG.EXTI_PIN = EXTI9PB9 ;
+//    EXTI_CFG.Trigger_Case = EXTI_Trigger_RISING ;
+//    EXTI_CFG.P_IRQ_Callback = EXTI9_Callback ;
+//    EXTI_CFG.IRQ_EN = EXTI_IRQ_Enable ;
+//    MCAL_EXTI_GPIO_Init(&EXTI_CFG);
+//    mainOS();
     IRQ_Flag = 1;
+    IRQ_Flag = OS_SVC_Set(3,3,1) ; //ADD
+    IRQ_Flag = OS_SVC_Set(3,3,2) ; //SUB
+    IRQ_Flag = OS_SVC_Set(3,3,3) ; //MULT
+
+    OS_SVC_Set(0,0,4) ; //PendSV
 
     /* Loop forever */
     while(1)
