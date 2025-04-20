@@ -1,9 +1,0 @@
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:13:6:LCD_kick	8	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:23:6:LCD_GOTO_XY	16	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:37:6:LCD_isbusy	8	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:137:6:LCD_clear_screen	8	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:142:6:LCD_INIT	8	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:231:6:LCD_WRITE_COMMAND	16	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:257:6:LCD_WRITE_CHAR	16	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:284:6:LCD_WRITE_STRING	24	static
-../STM32_F103C6_Drivers/LCD_DRIVER/lcd_driver.c:306:6:LCD_CUSTOM_CHARACTERS	8	static
